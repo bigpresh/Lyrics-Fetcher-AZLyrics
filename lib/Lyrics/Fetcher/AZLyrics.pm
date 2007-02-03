@@ -80,6 +80,12 @@ sub parse {
     #$lyrics =~ s/\n{3,}/\n\n/msgi;
     $lyrics =~ s/(\r?\n){3,}/\n\n/gsi;
     
+    
+    if (length $lyrics < 20) {
+        warn "$err - lyrics too short after parsing";
+        return;
+    }
+    
     return $lyrics;
 
 
