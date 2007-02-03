@@ -6,12 +6,13 @@ use 5.008007;
 use strict;
 use warnings;
 use LWP::UserAgent;
+use Carp;
 
 our $VERSION = '0.01';
 
-BEGIN {
-    $Lyrics::Fetcher::Error = 'OK';
-}
+# the HTTP User-Agent we'll send:
+our $AGENT = "Perl/Lyrics::Fetcher::AZLyrics $VERSION";
+
     
 
 sub fetch {
@@ -19,6 +20,14 @@ sub fetch {
     my $self = shift;
     my ( $artist, $song ) = @_;
     
+    # reset the error var, change it if an error occurs.
+    $Lyrics::Fetcher::Error = 'OK';
+    
+    unless ($artist && $song) {
+        carp($Lyrics::Fetcher::Error = 
+            'fetch() called without artist and song');
+        return;
+    }
     
     $artist =~ s/[^a-z0-9]//gi;
     $song   =~ s/[^a-z0-9]//gi;
@@ -28,11 +37,22 @@ sub fetch {
     
     my $ua = new LWP::UserAgent;
     $ua->timeout(6);
-    $ua->agent("Mozilla/5.0");
+    $ua->agent($AGENT);
     my $res = $ua->get($url);
     if ( $res->is_success ) {
         my $lyrics = parse($res->content);
         return $lyrics;
+    } else {
+    
+        if ($res->status_line =~ /^404/) {
+            $Lyrics::Fetcher::Error = 
+                'Lyrics not found';
+            return;
+        } else {
+            carp($Lyrics::Fetcher::Error = 
+                "Failed to retrieve $url (".$res->status_line.')');
+            return;
+        }
     }
 
 
@@ -50,10 +70,9 @@ sub parse {
     # split at empty lines:
     my @chunks = split /^[^\S]$/xms, $html;
     
-    warn "chunks: " . scalar @chunks;
-    
     if (@chunks != 5) {
-        warn "$err - wrong number of chunks (got: ".scalar @chunks.")";
+        carp($Lyrics::Fetcher::Error = 
+            "$err - wrong number of chunks (got: ".scalar @chunks.")");
         return;
     }
     
@@ -82,7 +101,8 @@ sub parse {
     
     
     if (length $lyrics < 20) {
-        warn "$err - lyrics too short after parsing";
+        carp($Lyrics::Fetcher::Error = 
+            "$err - lyrics too short after parsing");
         return;
     }
     
