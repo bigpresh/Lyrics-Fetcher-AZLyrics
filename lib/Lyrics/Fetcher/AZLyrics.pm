@@ -135,9 +135,6 @@ This module tries to get song lyrics from www.azlyrics.com.  It's designed to
 be called by Lyrics::Fetcher, but can be used directly if you'd prefer.
 
 
-Blah blah blah.
-
-
 
 =head1 BUGS
 
@@ -164,5 +161,10 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
 at your option, any later version of Perl 5 you may have available.
 
+Legal disclaimer: I have no connection with the owners of www.azlyrics.com.
+Lyrics fetched by this script may be copyrighted by the authors, it's up to 
+you to determine whether this is the case, and if so, whether you are entitled 
+to request/use those lyrics.  You will almost certainly not be allowed to use
+the lyrics obtained for any commercial purposes.
 
 =cut

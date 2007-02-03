@@ -13,25 +13,21 @@ use warnings;
 use lib '/home/davidp/dev/scripts/perl/modules/Lyrics-Fetcher-AZLyrics/lib';
 
 require Lyrics::Fetcher::AZLyrics;
-
+require Lyrics::Fetcher;
 
 #my $lyrics =  Lyrics::Fetcher->fetch(
 #    'Death Cab For Cutie', 'What Sarah Said', 'AZLyrics');
 
-# should fail:
-my $lyrics = Lyrics::Fetcher::AZLyrics->fetch();
-
-print "LFE: $Lyrics::Fetcher::Error\n";
     
-$lyrics =  Lyrics::Fetcher::AZLyrics->fetch(
+my $lyrics =  Lyrics::Fetcher::AZLyrics->fetch(
     'Death Cab For Cutie', 'What Sarah Said');
 print "lyrics: [$lyrics]\n";
 
 print "LFE: $Lyrics::Fetcher::Error\n";
 
 
-$lyrics =  Lyrics::Fetcher::AZLyrics->fetch(
-    'Death Cab For Cutie', 'What Your Mum Said');
-print "lyrics: [$lyrics]\n";
+$lyrics = Lyrics::Fetcher->fetch(
+    'Death Cab For Cutie', 'What Sarah Said', 'AZLyrics');
+print "Lyrics via Lyrics::Fetcher->fetch() : \n";
+print "[$lyrics]";
 
-print "LFE: $Lyrics::Fetcher::Error\n";
