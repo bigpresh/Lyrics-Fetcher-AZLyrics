@@ -1,0 +1,6 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+t/Lyrics-Fetcher-AZLyrics.t
+lib/Lyrics/Fetcher/AZLyrics.pm
