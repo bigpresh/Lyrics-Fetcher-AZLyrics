@@ -27,7 +27,8 @@ print "LFE: $Lyrics::Fetcher::Error\n";
 
 
 $lyrics = Lyrics::Fetcher->fetch(
-    'Death Cab For Cutie', 'What Sarah Said', 'AZLyrics');
+    'Oasis', "Turn Up The Sun", 'AZLyrics');
+print "LFE: $Lyrics::Fetcher::Error\n";
 print "Lyrics via Lyrics::Fetcher->fetch() : \n";
 print "[$lyrics]";
 

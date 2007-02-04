@@ -6,6 +6,7 @@ use 5.008007;
 use strict;
 use warnings;
 use LWP::UserAgent;
+use HTML::TokeParser;
 use Carp;
 
 our $VERSION = '0.01';
@@ -58,58 +59,77 @@ sub fetch {
 
 }
 
-# takes the HTML returned by azlyrics.com and attempts to parse out the 
-# lyrics.  We have to make some terrible assumptions here on the format of
-# the response, if they change their pages, it'll probably break.
+
 sub parse {
-
+    
     my $html = shift;
+    my $tp = HTML::TokeParser->new(\$html);
+    #my $text = $tp->get_trimmed_text();
     
-    my $err = "Failed to parse AZLyrics response";
     
-    # split at empty lines:
-    my @chunks = split /^[^\S]$/xms, $html;
+    # the HTML on the pages returned by azlyrics.com is rather nasty, so we
+    # have to do dirty tricks to parse it.  We'll find all <font> tags, and read
+    # from there until the </font> tag.  If what we got looks vaguely suitable,
+    # we then need to trim it a little.
+    while (my $wotsit = $tp->get_tag('font')) {
+        
+        # get the text up to the next </font> tag
+        my $text = $tp->get_text('/font');
+        
+        if (length $text > 20) {
+            # this might well be it.  We'll clean it up and do some checks on
+            # it in the process.
+            
+            $text =~ s/\r//mg;
+            
+            # the page title should look like "<ARTIST> LYRICS" on a line
+            # by itself:
+            unless ($text =~ s/^.*LYRICS \n?//xgs) {
+                carp("No page title found, this HTML doesn't look right");
+                return;
+            }
+           
+            
+            unless ($text =~ s/\[ \s www\.azlyrics\.com \s \]//xmg) {
+                carp("No azlyrics.com line found");
+                return;
+            }
+            
+            # song title should be on a line that starts and ends with double
+            # quotes, strip it out
+            unless ($text =~ s/" .+ "//xmg) {
+                carp("No song title found, this HTML doesn't look right");
+                return;
+            }
+            
+            # some lyrics pages have credits at the bottom for the submitter...
+            # remove them from the lyrics, but store them in case they're
+            # wanted:
+            my @credits;
+            while ($text =~ s{\[ Thanks \s to \s (.+) \]}{}xgi) {
+                push @credits, $1;
+            }
+            
+            # bodge... do this twice, to avoid the '... used only once' warning
+            @Lyrics::Fetcher::azcredits = @credits;
+            @Lyrics::Fetcher::azcredits = @credits;
+            
+            # finally, clear up excess blank lines:
+            while ($text =~ s/\n{2,}/\n/gs) {};
+
+            
+            
+            return $text;
+            
+        }
+        
     
-    if (@chunks != 5) {
-        carp($Lyrics::Fetcher::Error = 
-            "$err - wrong number of chunks (got: ".scalar @chunks.")");
-        return;
+    
     }
     
-    my $lyrics = $chunks[2];
-    
-    # remove the <br> tags:
-    $lyrics =~ s{<br (\s? /)? >}{}xgi;
-    
-    # remove the credits (in <i> tags), and put them in @credits so we
-    # can return them
-    my @credits;
-    while ($lyrics =~ s{ <i> (.+) </i> }{}xgi) {
-        push @credits, $1;
-    }
-    @Lyrics::Fetcher::azcredits = @credits;
-    
-    # remove the homepage link:
-    $lyrics =~ s/\[ .+ \]//xgi;
-    
-    # and strip any more HTML:
-    $lyrics =~ s/<.*>//xgi;
-    
-    # condense any sets of 3 or more newlines to 2:
-    #$lyrics =~ s/\n{3,}/\n\n/msgi;
-    $lyrics =~ s/(\r?\n){3,}/\n\n/gsi;
-    
-    
-    if (length $lyrics < 20) {
-        carp($Lyrics::Fetcher::Error = 
-            "$err - lyrics too short after parsing");
-        return;
-    }
-    
-    return $lyrics;
+} # end of sub parse
 
 
-}
 
 1;
 __END__
