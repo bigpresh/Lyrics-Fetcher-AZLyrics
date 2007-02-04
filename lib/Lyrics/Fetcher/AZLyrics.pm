@@ -159,7 +159,12 @@ be called by Lyrics::Fetcher, but can be used directly if you'd prefer.
 =head1 BUGS
 
 Probably.  If you find any, please let me know.  If azlyrics.com change their
-site much, this module may well stop working.
+site much, this module may well stop working.  If you find any songs which
+have lyrics listed on the www.azlyrics.com site, but for which this module is
+unable to fetch lyrics, please let me know also.  It seems that the HTML on
+the lyrics pages isn't consistent, so it's entirely possible (likely, in fact)
+that there are some pages which this script will not be able to parse.
+
 
 =head1 COPYRIGHT
 
