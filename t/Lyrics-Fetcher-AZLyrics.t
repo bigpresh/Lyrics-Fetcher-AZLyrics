@@ -13,7 +13,7 @@ use strict;
 use warnings;
 
 use lib '../lib/';
-require Lyrics::Fetcher;
+require Lyrics::Fetcher::AZLyrics;
 require LWP::UserAgent;
 
 # we have a set of tests, some of which should work, some of which should
@@ -78,7 +78,7 @@ TEST: for my $test (@tests) {
     #printf "%s by %s\n", @$test{ qw(title artist) };
     $testnum++;
     
-    my $lyrics = Lyrics::Fetcher->fetch(@$test{ qw(artist title) }, 'AZLyrics');
+    my $lyrics = Lyrics::Fetcher::AZLyrics->fetch(@$test{ qw(artist title) });
     if ($test->{fail} && ($lyrics || $Lyrics::Fetcher::Error eq 'OK')) {
         print "not ok $testnum - test should fail, but didn't\n";
         next TEST;

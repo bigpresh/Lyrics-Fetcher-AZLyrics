@@ -9,7 +9,7 @@ use LWP::UserAgent;
 use HTML::TokeParser;
 use Carp;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 # the HTTP User-Agent we'll send:
 our $AGENT = "Perl/Lyrics::Fetcher::AZLyrics $VERSION";
