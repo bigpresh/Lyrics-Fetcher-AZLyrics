@@ -5,7 +5,8 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     NAME              => 'Lyrics::Fetcher::AZLyrics',
     VERSION_FROM      => 'lib/Lyrics/Fetcher/AZLyrics.pm', # finds $VERSION
-    PREREQ_PM         => { LWP::UserAgent => 0, HTML::TokeParser => 0 }, 
+    PREREQ_PM         => { LWP::UserAgent => 0, HTML::TokeParser => 0 },
+    NO_META           => 1,
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Lyrics/Fetcher/AZLyrics.pm', # retrieve abstract from module
        AUTHOR         => 'David Precious <davidp@preshweb.co.uk>') : ()),

@@ -1,4 +1,4 @@
-Lyrics-Fetcher-AZLyrics version 0.02
+Lyrics-Fetcher-AZLyrics
 ====================================
 
 Lyrics::Fetcher::AZLyrics, as the name suggests, fetches lyrics
@@ -30,7 +30,7 @@ if you want to do so.
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2007 by David Precious
+Copyright (C) 2007-08 by David Precious
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
