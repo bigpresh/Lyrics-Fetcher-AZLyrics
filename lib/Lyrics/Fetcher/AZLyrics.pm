@@ -41,7 +41,7 @@ sub fetch {
     $ua->agent($AGENT);
     my $res = $ua->get($url);
     if ( $res->is_success ) {
-        my $lyrics = parse($res->content);
+        my $lyrics = _parse($res->content);
         return $lyrics;
     } else {
     
@@ -60,7 +60,7 @@ sub fetch {
 }
 
 
-sub parse {
+sub _parse {
     
     my $html = shift;
     my $tp = HTML::TokeParser->new(\$html);
@@ -154,6 +154,15 @@ Lyrics::Fetcher::AZLyrics - Get song lyrics from www.azlyrics.com
 This module tries to get song lyrics from www.azlyrics.com.  It's designed to
 be called by Lyrics::Fetcher, but can be used directly if you'd prefer.
 
+=head1 INTERFACE
+
+=over 4
+
+=item fetch($artist, $title)
+
+Attempts to fetch lyrics.
+
+=back
 
 
 =head1 BUGS
@@ -180,7 +189,7 @@ David Precious E<lt>davidp@preshweb.co.ukE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2007 by David Precious
+Copyright (C) 2007-08 by David Precious
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
