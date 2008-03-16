@@ -1,5 +1,8 @@
 Revision history for Perl extension Lyrics::Fetcher::AZLyrics.
 
+0.03
+   - fix comments in test scripts (thanks to James Ronan)
+
 0.02  05/02/2007 Er... the test script tested calling this module via
       Lyrics::Fetcher->fetch(), which isn't a good idea since we don't
       have a dependency on Lyrics::Fetcher.

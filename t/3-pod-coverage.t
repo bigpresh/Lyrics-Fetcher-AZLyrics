@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Test POD coverage for SMS::AQL
+# Test POD coverage
 #
 # $Id: 3-pod-coverage.t 245 2008-02-19 19:27:14Z davidp $
 
