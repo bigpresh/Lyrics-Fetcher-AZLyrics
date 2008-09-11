@@ -98,6 +98,8 @@ sub _parse {
         # finally, clear up excess blank lines:
         $text =~ s/(\r?\n){2,}/\n\n/gs;
 
+        return $text;
+
     } else {
         carp "Failed to identify lyrics on result page";
         return;
