@@ -61,17 +61,13 @@ sub fetch {
 
 
 sub _parse {
-    
     my $html = shift;
     my $hs = HTML::Strip->new();
-
 
     # Nasty - look for everything in between the two ringtones links:
     if (my ($goodbit) = $html =~
         m{<\!-- END OF RINGTONE -->(.+)<\!-- RINGTONE -->}msi)
     {
-        carp "Found good-looking bit: *** $goodbit ***";
-
         my $text = $hs->parse($html);
 
         # the page title should look like "<ARTIST> LYRICS" on a line
@@ -101,8 +97,6 @@ sub _parse {
 
         # finally, clear up excess blank lines:
         $text =~ s/(\r?\n){2,}/\n\n/gs;
-
-        carp "Cleaned content: *** $text ***";
 
     } else {
         carp "Failed to identify lyrics on result page";
