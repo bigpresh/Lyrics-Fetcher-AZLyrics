@@ -1,5 +1,7 @@
 Revision history for Perl extension Lyrics::Fetcher::AZLyrics.
 
+0.04  (2008/09/11)
+   - AZLyrics.com changed their HTML slightly, adding ringtones adverts.
 0.03
    - fix comments in test scripts (thanks to James Ronan)
 

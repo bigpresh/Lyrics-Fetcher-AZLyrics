@@ -1,7 +1,7 @@
  --- #YAML:1.0
  name: Lyrics-Fetcher-AZLyrics
  abstract: Get song lyrics from www.azlyrics.com
- version: 0.03
+ version: 0.04
  author:
    - David Precious <davidp@preshweb.co.uk>
  license: perl
