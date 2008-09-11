@@ -88,7 +88,7 @@ sub _parse {
         }
 
         # Remove mentions of ringtones:
-        $text =~ s/^ .+ ringtone .+ $//xgi;
+        $text =~ s/^ .+ ringtone .+ $//xmgi;
 
         # Scoop out any credits for these lyrics:
         my @credits;
