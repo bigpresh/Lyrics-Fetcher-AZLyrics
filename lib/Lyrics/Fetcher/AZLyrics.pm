@@ -6,7 +6,7 @@ use 5.008000;
 use strict;
 use warnings;
 use LWP::UserAgent;
-use HTML::TokeParser;
+use HTML::Strip;
 use Carp;
 
 our $VERSION = '0.03';
@@ -63,70 +63,52 @@ sub fetch {
 sub _parse {
     
     my $html = shift;
-    my $tp = HTML::TokeParser->new(\$html);
-    #my $text = $tp->get_trimmed_text();
-    
-    
-    # the HTML on the pages returned by azlyrics.com is rather nasty, so we
-    # have to do dirty tricks to parse it.  We'll find all <font> tags, and read
-    # from there until the </font> tag.  If what we got looks vaguely suitable,
-    # we then need to trim it a little.
-    while (my $wotsit = $tp->get_tag('font')) {
-        
-        # get the text up to the next </font> tag
-        my $text = $tp->get_text('/font');
-        
-        if (length $text > 20) {
-            # this might well be it.  We'll clean it up and do some checks on
-            # it in the process.
-            
-            $text =~ s/\r//mg;
-            
-            # the page title should look like "<ARTIST> LYRICS" on a line
-            # by itself:
-            unless ($text =~ s/^.*LYRICS \n?//xgs) {
-                carp("No page title found, this HTML doesn't look right");
-                return;
-            }
-           
-            
-            unless ($text =~ s/\[ \s www\.azlyrics\.com \s \]//xmg) {
-                carp("No azlyrics.com line found");
-                return;
-            }
-            
-            # song title should be on a line that starts and ends with double
-            # quotes, strip it out
-            unless ($text =~ s/" .+ "//xmg) {
-                carp("No song title found, this HTML doesn't look right");
-                return;
-            }
-            
-            # some lyrics pages have credits at the bottom for the submitter...
-            # remove them from the lyrics, but store them in case they're
-            # wanted:
-            my @credits;
-            while ($text =~ s{\[ Thanks \s to \s (.+) \]}{}xgi) {
-                push @credits, $1;
-            }
-            
-            # bodge... do this twice, to avoid the '... used only once' warning
-            @Lyrics::Fetcher::azcredits = @credits;
-            @Lyrics::Fetcher::azcredits = @credits;
-            
-            # finally, clear up excess blank lines:
-            while ($text =~ s/\n{2,}/\n/gs) {};
+    my $hs = HTML::Strip->new();
 
-            
-            
-            return $text;
-            
+
+    # Nasty - look for everything in between the two ringtones links:
+    if (my ($goodbit) = $html =~
+        m{<\!-- END OF RINGTONE -->(.+)<\!-- RINGTONE -->}msi)
+    {
+        carp "Found good-looking bit: *** $goodbit ***";
+
+        my $text = $hs->parse($html);
+
+        # the page title should look like "<ARTIST> LYRICS" on a line
+        # by itself:
+        unless ($text =~ s/^.*LYRICS \n?//xgs) {
+            carp("No page title found, this HTML doesn't look right");
+            return;
         }
-        
-    
-    
+
+        # Find the [ www.azlyrics.com ] line
+        unless ($text =~ s/\[ .+ www\.azlyrics\.com .+ \]//xmg) {
+            carp("No azlyrics.com line found");
+            return;
+        }
+
+        # Remove mentions of ringtones:
+        $text =~ s/^ .+ ringtone .+ $//xgi;
+
+        # Scoop out any credits for these lyrics:
+        my @credits;
+        while ($text =~ s{\[ Thanks \s to \s (.+) \]}{}xgi) {
+            push @credits, $1;
+        }
+        # bodge... do this twice, to avoid the '... used only once' warning
+        @Lyrics::Fetcher::azcredits = @credits;
+        @Lyrics::Fetcher::azcredits = @credits;
+
+        # finally, clear up excess blank lines:
+        $text =~ s/(\r?\n){2,}/\n\n/gs;
+
+        carp "Cleaned content: *** $text ***";
+
+    } else {
+        carp "Failed to identify lyrics on result page";
+        return;
     }
-    
+
 } # end of sub parse
 
 
