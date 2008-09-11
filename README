@@ -21,7 +21,7 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 
   LWP
-  HTML::TokeParser
+  HTML::Strip
   
 Calling Lyrics::Fetcher::AZLyrics via Lyrics::Fetcher->fetch() is
 recommended, but you can call Lyrics::Fetcher::AZLyrics->fetch() directly
