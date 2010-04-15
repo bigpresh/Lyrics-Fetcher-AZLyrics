@@ -27,12 +27,7 @@ use Lyrics::Fetcher::AZLyrics;
 #               message that we expect to see upon failure
 my @tests = (
 
-    {
-        title   => 'Cast No Shadow',
-        artist  => 'Oasis',
-        lookfor => qr/As he faced the sun he cast no shadow/,
-    },
-    {
+   {
         title   => 'Heavy Fuel',
         artist  => 'Dire Straits',
         lookfor => qr/Last time I was sober, man I felt bad/i,

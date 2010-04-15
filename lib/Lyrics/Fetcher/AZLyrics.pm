@@ -68,26 +68,19 @@ sub _parse {
     if (my ($goodbit) = $html =~
         m{<\!-- END OF RINGTONE 1 -->(.+)<\!-- RINGTONE 2 -->}msi)
     {
-        my $text = $hs->parse($html);
-
-        # the page title should look like "<ARTIST> LYRICS" on a line
-        # by itself:
-        unless ($text =~ s/^.*LYRICS \n?//xgs) {
-            carp("No page title found, this HTML doesn't look right");
-            return;
-        }
+        my $text = $hs->parse($goodbit);
 
         # Remove mentions of ringtones:
         $text =~ s/^ .+ ringtone .+ $//xmgi;
 
         # Scoop out any credits for these lyrics:
         my @credits;
+        @Lyrics::Fetcher::azcredits = ();
         while ($text =~ s{\[ Thanks \s to \s (.+) \]}{}xgi) {
-            push @credits, $1;
+            push @Lyrics::Fetcher::azcredits, $1;
         }
-        # bodge... do this twice, to avoid the '... used only once' warning
-        @Lyrics::Fetcher::azcredits = @credits;
-        @Lyrics::Fetcher::azcredits = @credits;
+
+        $text =~ s/\s*\[.+at \s www.AZLyrics.com\s+\]\s*//xmgi;
 
         # finally, clear up excess blank lines:
         $text =~ s/(\r?\n){2,}/\n\n/gs;
