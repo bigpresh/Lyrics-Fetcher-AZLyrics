@@ -6,7 +6,6 @@ WriteMakefile(
     NAME              => 'Lyrics::Fetcher::AZLyrics',
     VERSION_FROM      => 'lib/Lyrics/Fetcher/AZLyrics.pm',
     PREREQ_PM         => { LWP::UserAgent => 0, HTML::Strip => 0 },
-    NO_META           => 1,
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Lyrics/Fetcher/AZLyrics.pm',
        AUTHOR         => 'David Precious <davidp@preshweb.co.uk>') : ()),
