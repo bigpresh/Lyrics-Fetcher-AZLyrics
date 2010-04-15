@@ -66,7 +66,7 @@ sub _parse {
 
     # Nasty - look for everything in between the two ringtones links:
     if (my ($goodbit) = $html =~
-        m{<\!-- END OF RINGTONE -->(.+)<\!-- RINGTONE -->}msi)
+        m{<\!-- END OF RINGTONE 1 -->(.+)<\!-- RINGTONE 2 -->}msi)
     {
         my $text = $hs->parse($html);
 
@@ -74,12 +74,6 @@ sub _parse {
         # by itself:
         unless ($text =~ s/^.*LYRICS \n?//xgs) {
             carp("No page title found, this HTML doesn't look right");
-            return;
-        }
-
-        # Find the [ www.azlyrics.com ] line
-        unless ($text =~ s/\[ .+ www\.azlyrics\.com .+ \]//xmg) {
-            carp("No azlyrics.com line found");
             return;
         }
 
