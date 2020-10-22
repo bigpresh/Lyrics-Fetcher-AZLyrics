@@ -160,11 +160,15 @@ the same terms as Perl itself.
 
 David Precious E<lt>davidp@preshweb.co.ukE<gt>
 
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to Jim Turner for submitting a patch in RT 133592 to accomodate changes
+to the AZLyrics site to make this work again
 
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2007-08 by David Precious
+Copyright (C) 2007-20 by David Precious
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.7 or,
