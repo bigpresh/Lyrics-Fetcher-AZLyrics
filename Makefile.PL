@@ -12,4 +12,11 @@ WriteMakefile(
 
     # include the LICENSE param, as long as EU::MM is new enough to support it:
     ($ExtUtils::MakeMaker::VERSION >= 6.3002 ? (LICENSE => "perl") : () ),
+    META_MERGE => {
+        resources => {
+            repository => 'https://github.com/bigpresh/Lyrics-Fetcher-AZLyrics',
+            bugtracker => 'https://github.com/bigpresh/Lyrics-Fetcher-AZLyrics/issues',
+            homepage   => 'https://github.com/bigpresh/Lyrics-Fetcher-AZLyrics',
+        },
+    },
 );
